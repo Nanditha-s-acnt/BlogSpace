@@ -787,3 +787,112 @@ input:checked + .slider:before { transform: translateX(21px); }
     border-radius: 4px;
     cursor: pointer;
 }
+/* ══════════════════════════════════════════
+   MOBILE RESPONSIVE
+══════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+    /* Hide sidebar completely on mobile */
+    .sidebar {
+        display: none;
+    }
+
+    /* Full width main content */
+    .feed-container {
+        margin-left: 0;
+        padding: 20px 5%;
+    }
+
+    /* Bottom navigation bar for mobile */
+    .mobile-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #1e1e1e;
+        border-top: 1px solid #333;
+        z-index: 1000;
+        padding: 10px 0;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .mobile-nav a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .mobile-nav a.active,
+    .mobile-nav a:hover {
+        color: var(--accent);
+    }
+
+    .mobile-nav i {
+        font-size: 1.4rem;
+    }
+
+    .mobile-nav .logout-mobile {
+        color: #ff4d4d;
+    }
+
+    /* Add padding at bottom so content isn't hidden behind nav */
+    body {
+        padding-bottom: 70px;
+    }
+
+    /* Fix feed grid to single column */
+    .blog-feed {
+        grid-template-columns: 1fr;
+    }
+
+    /* Fix card text sizes */
+    .feed-card h3 {
+        font-size: 1.1rem;
+    }
+
+    /* Fix profile page */
+    .profile-main {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-info h1 {
+        font-size: 2rem;
+    }
+
+    .stats-row {
+        justify-content: center;
+    }
+
+    /* Fix write page */
+    .title-input {
+        font-size: 1.3rem;
+    }
+
+    .type-selector {
+        flex-wrap: wrap;
+    }
+
+    /* Fix auth page */
+    .auth-container {
+        padding: 2rem;
+    }
+
+    /* Fix post title */
+    .post-title {
+        font-size: 2rem;
+    }
+}
+
+/* Hide mobile nav on desktop */
+.mobile-nav {
+    display: none;
+}
