@@ -301,7 +301,7 @@ $posts_result = mysqli_query($conn,
             </nav>
         </div>
         
-        <div class="sidebar-bottom" style="position:absolute; bottom:30px; left:30px;">>
+        <div class="sidebar-bottom" style="position:absolute; bottom:30px; left:30px;">
             <a href="logout.php" class="logout-link">
                 <i class='bx bx-log-out'></i>Logout
             </a>
