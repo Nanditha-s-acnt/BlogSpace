@@ -300,7 +300,8 @@ $posts_result = mysqli_query($conn,
                 <a href="settings.php"><i class='bx bx-cog'></i> Settings</a>
             </nav>
         </div>
-        <div class="sidebar-bottom">
+        
+        <div class="sidebar-bottom" style="position:absolute; bottom:30px; left:30px;">>
             <a href="logout.php" class="logout-link">
                 <i class='bx bx-log-out'></i>Logout
             </a>
