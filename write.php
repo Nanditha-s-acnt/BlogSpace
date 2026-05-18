@@ -309,6 +309,10 @@ $topics = [
     <!-- MEDIA -->
     <div id="media-field" style="display:none; margin-bottom:30px;">
         <label>Media URL</label>
+        <button> Gallery </button>
+<button> Camera </button>
+— or paste image URL —
+<input type="text" ...>
         <input
             type="text"
             name="media_url"
