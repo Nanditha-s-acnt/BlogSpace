@@ -157,6 +157,15 @@ $user_theme     = in_array($_SESSION['theme'] ?? '', $allowed_themes)
                 </div>
             </div>
 
+            <!-- ── Post Image ──────────────────────────── -->
+<?php if (!empty($post['media_url'])): ?>
+    <div style="margin-bottom: 30px;">
+        <img src="<?php echo htmlspecialchars($post['media_url']); ?>"
+             alt="Post image"
+             style="width:100%; max-height:500px; object-fit:cover; border-radius:6px;">
+    </div>
+<?php endif; ?>
+
             <!-- ── Post Body ──────────────────────────── -->
             <div class="post-content">
                 <?php
