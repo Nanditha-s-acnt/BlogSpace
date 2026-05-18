@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head><title>Autosave Test</title></head>
+<body>
+<h2>Autosave Debug Test</h2>
+<input type="text" id="title" placeholder="Type a title here">
+<br><br>
+<textarea id="content" placeholder="Type content here" rows="5" cols="40"></textarea>
+<br><br>
+<button onclick="testSave()">Test Autosave Now</button>
+<br><br>
+<div id="result" style="background:#f0f0f0; padding:10px; white-space:pre-wrap; min-height:50px;"></div>
+
+<script>
+function testSave() {
+    var title   = document.getElementById('title').value;
+    var content = document.getElementById('content').value;
+
+    var params = 'title='   + encodeURIComponent(title)
+               + '&content=' + encodeURIComponent(content)
+               + '&topic=General'
+               + '&post_type=text'
+               + '&media_url='
+               + '&content_extra='
+               + '&post_id='
+               + '&autosave=true';
+
+    document.getElementById('result').innerText = 'Sending...';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'autosave_handler.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4) {
+            document.getElementById('result').innerText = 'RESPONSE:\n' + xhr.responseText;
+        }
+    };
+    xhr.send(params);
+}
+</script>
+</body>
+</html>
