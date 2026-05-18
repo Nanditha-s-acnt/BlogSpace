@@ -307,20 +307,40 @@ $topics = [
     </div>
 
     <!-- MEDIA -->
-    <div id="media-field" style="display:none; margin-bottom:30px;">
-        <label>Media URL</label>
-        <button> Gallery </button>
-<button> Camera </button>
-— or paste image URL —
-<input type="text" ...>
-        <input
-            type="text"
-            name="media_url"
-            class="media-input"
-            placeholder="Paste image URL..."
-            value="<?= htmlspecialchars($edit_post['media_url']) ?>"
-        >
+<div id="media-field" style="display:none; margin-bottom:30px;">
+    <label class="write-field" style="font-size:0.7rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);display:block;margin-bottom:12px;">Media</label>
+
+    <div style="display:flex; gap:12px; margin-bottom:16px;">
+        <button type="button" class="type-btn" id="btn-gallery">
+            <i class='bx bx-image-add'></i> Gallery
+        </button>
+        <button type="button" class="type-btn" id="btn-camera">
+            <i class='bx bx-camera'></i> Camera
+        </button>
     </div>
+
+    <p style="color:#555; font-size:0.8rem; margin:0 0 10px;">— or paste image URL —</p>
+
+    <input
+        type="text"
+        name="media_url"
+        id="media_url_input"
+        class="media-input"
+        placeholder="Paste image URL..."
+        value="<?= htmlspecialchars($edit_post['media_url']) ?>"
+    >
+
+    <!-- Hidden file input, reused for both gallery and camera -->
+    <input type="file" id="file-picker" accept="image/*" style="display:none;">
+
+    <!-- Preview -->
+    <img
+        id="img-preview"
+        src=""
+        alt="Preview"
+        style="display:none; margin-top:14px; max-width:100%; border-radius:8px; border:1px solid #333;"
+    >
+</div>
 
     <!-- CODE -->
     <div id="code-field" style="display:none;">
@@ -437,6 +457,52 @@ ed.addEventListener('input', () => {
 
 // Fallback every 30 seconds
 setInterval(autosave, 30000);
+
+/* GALLERY & CAMERA UPLOAD */
+const filePicker    = document.getElementById('file-picker');
+const mediaUrlInput = document.getElementById('media_url_input');
+const imgPreview    = document.getElementById('img-preview');
+
+document.getElementById('btn-gallery').addEventListener('click', () => {
+    filePicker.removeAttribute('capture');
+    filePicker.click();
+});
+
+document.getElementById('btn-camera').addEventListener('click', () => {
+    filePicker.setAttribute('capture', 'environment');
+    filePicker.click();
+});
+
+filePicker.addEventListener('change', () => {
+    const file = filePicker.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        imgPreview.src = e.target.result;
+        imgPreview.style.display = 'block';
+        mediaUrlInput.value = e.target.result;
+    };
+    reader.readAsDataURL(file);
+});
+
+mediaUrlInput.addEventListener('input', () => {
+    const val = mediaUrlInput.value.trim();
+    if (val.startsWith('http')) {
+        imgPreview.src = val;
+        imgPreview.style.display = 'block';
+        imgPreview.onerror = () => { imgPreview.style.display = 'none'; };
+    } else {
+        imgPreview.style.display = 'none';
+    }
+});
+
+(function() {
+    const existing = mediaUrlInput.value.trim();
+    if (existing) {
+        imgPreview.src = existing;
+        imgPreview.style.display = 'block';
+    }
+})();
 
 </script>
 
