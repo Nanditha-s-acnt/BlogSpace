@@ -278,35 +278,54 @@ $posts_result = mysqli_query($conn,
             object-fit: cover;
             margin-top: 15px;
         }
+        .sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* pushes logout to bottom */
+}
+
+.sidebar-top {
+    display: flex;
+    flex-direction: column;
+}
     </style>
 </head>
 
 <body class="dashboard-body">
 
     <!-- ══════════════ SIDEBAR ══════════════ -->
-    <aside class="sidebar">
-        <div class="sidebar-top">
-            <div class="logo">BlogSpace<span>.</span></div>
+<aside class="sidebar">
+    <div class="sidebar-top">
+        <div class="logo">BlogSpace<span>.</span></div>
 
-            <img src="uploads/<?php echo !empty($user['profile_pic']) ? htmlspecialchars($user['profile_pic']) : 'default.png'; ?>"
-                 alt="Profile Pic"
-                 class="profile-pic">
+        <img src="uploads/<?php echo !empty($user['profile_pic']) ? htmlspecialchars($user['profile_pic']) : 'default.png'; ?>"
+             alt="Profile Pic"
+             class="profile-pic">
 
-            <nav class="side-nav">
-                <a href="dashboard.php" class="active"><i class='bx bx-home-alt-2'></i> Feed</a>
-                <a href="profile.php"><i class='bx bx-user-circle'></i> My Profile</a>
-                <a href="write.php"><i class='bx bx-edit-alt'></i> Write Post</a>
-                <a href="drafts.php"><i class='bx bx-file'></i> Drafts</a>
-                <a href="settings.php"><i class='bx bx-cog'></i> Settings</a>
-            </nav>
-        </div>
-        
-        <div class="sidebar-bottom" style="position:absolute; bottom:30px; left:30px;">
-            <a href="logout.php" class="logout-link">
-                <i class='bx bx-log-out'></i>Logout
-            </a>
-        </div>
-    </aside>
+        <nav class="side-nav">
+            <a href="dashboard.php" class="active"><i class='bx bx-home-alt-2'></i> Feed</a>
+            <a href="profile.php"><i class='bx bx-user-circle'></i> My Profile</a>
+            <a href="write.php"><i class='bx bx-edit-alt'></i> Write Post</a>
+            <a href="drafts.php"><i class='bx bx-file'></i> Drafts</a>
+            <a href="settings.php"><i class='bx bx-cog'></i> Settings</a>
+        </nav>
+    </div>
+
+    <a href="logout.php" style="
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #ff4d4d;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        padding: 15px 0;
+        border-top: 1px solid #333;
+        margin-top: auto;
+    ">
+        <i class='bx bx-log-out' style="font-size:1.3rem;"></i> Logout
+    </a>
+</aside>
 
     <!-- ══════════════ MAIN CONTENT ══════════════ -->
     <main class="feed-container">
