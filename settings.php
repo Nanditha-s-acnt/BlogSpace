@@ -458,6 +458,15 @@ document.querySelectorAll('.theme-option').forEach(btn => {
     });
 });
 </script>
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-nav">
+    <a href="dashboard.php"><i class='bx bx-home-alt-2'></i> Feed</a>
+    <a href="profile.php"><i class='bx bx-user-circle'></i> Profile</a>
+    <a href="write.php"><i class='bx bx-edit-alt'></i> Write</a>
+    <a href="drafts.php"><i class='bx bx-file'></i> Drafts</a>
+    <a href="settings.php"><i class='bx bx-cog'></i> Settings</a>
+    <a href="logout.php" class="logout-mobile"><i class='bx bx-log-out'></i> Logout</a>
+</nav>
 
 </body>
 </html>
