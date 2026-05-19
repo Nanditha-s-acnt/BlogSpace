@@ -278,16 +278,7 @@ $posts_result = mysqli_query($conn,
             object-fit: cover;
             margin-top: 15px;
         }
-        .sidebar {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* pushes logout to bottom */
-}
-
-.sidebar-top {
-    display: flex;
-    flex-direction: column;
-}
+    
     </style>
 </head>
 
@@ -298,9 +289,20 @@ $posts_result = mysqli_query($conn,
     <div class="sidebar-top">
         <div class="logo">BlogSpace<span>.</span></div>
 
-        <img src="uploads/<?php echo !empty($user['profile_pic']) ? htmlspecialchars($user['profile_pic']) : 'default.png'; ?>"
-             alt="Profile Pic"
-             class="profile-pic">
+        <a href="profile.php" class="sidebar-user-card">
+            <div class="sidebar-user-avatar">
+                <?php if (!empty($user['profile_pic']) && file_exists('uploads/' . $user['profile_pic'])): ?>
+                    <img src="uploads/<?php echo htmlspecialchars($user['profile_pic']); ?>" alt="">
+                <?php else: ?>
+                    <div class="sidebar-avatar-fallback"><i class='bx bxs-user-circle'></i></div>
+                <?php endif; ?>
+                <span class="online-dot"></span>
+            </div>
+            <div class="sidebar-user-info">
+                <span class="sidebar-user-name"><?php echo htmlspecialchars($user['username']); ?></span>
+                <span class="sidebar-user-handle">Writer · BlogSpace</span>
+            </div>
+        </a>
 
         <nav class="side-nav">
             <a href="dashboard.php" class="active"><i class='bx bx-home-alt-2'></i> Feed</a>
@@ -311,21 +313,13 @@ $posts_result = mysqli_query($conn,
         </nav>
     </div>
 
-    <a href="logout.php" style="
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: #ff4d4d;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 0.9rem;
-        padding: 15px 0;
-        border-top: 1px solid #333;
-        margin-top: auto;
-    ">
-        <i class='bx bx-log-out' style="font-size:1.3rem;"></i> Logout
-    </a>
+    <div class="sidebar-bottom">
+        <a href="logout.php" class="logout-link">
+            <i class='bx bx-log-out'></i> Logout
+        </a>
+    </div>
 </aside>
+
 
     <!-- ══════════════ MAIN CONTENT ══════════════ -->
     <main class="feed-container">
