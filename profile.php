@@ -628,6 +628,7 @@ $user_theme     = in_array($_SESSION['theme'] ?? '', $allowed_themes)
                        value="<?= htmlspecialchars($user['username']) ?>" required>
             </div>
             <div class="input-group">
+                
                 <label>Bio</label>
                 <textarea name="bio" placeholder="Write a short bio…"><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
             </div>
@@ -641,72 +642,98 @@ $user_theme     = in_array($_SESSION['theme'] ?? '', $allowed_themes)
 
 
 <script>
+/* ── Modal ── */
 function openModal()  { document.getElementById('editModal').style.display = 'flex'; }
 function closeModal() { document.getElementById('editModal').style.display = 'none'; }
 document.getElementById('editModal').addEventListener('click', e => {
     if (e.target === e.currentTarget) closeModal();
 });
 
-/* Click avatar on profile page → upload */
+/* ── Click avatar on profile page ── */
+const avatarWrapper = document.querySelector('.profile-avatar-wrapper');
+if (avatarWrapper) {
+    avatarWrapper.addEventListener('click', function() {
+        document.getElementById('avatarFileInput').click();
+    });
+}
+
 document.getElementById('avatarFileInput').addEventListener('change', function() {
-    uploadProfilePic(this.files[0], function(url) {
-        const preview = document.getElementById('avatarPreview');
-        preview.src = url;
-        preview.style.display = 'block';
-        const iconWrap = document.getElementById('avatarIconWrap');
-        if (iconWrap) iconWrap.style.display = 'none';
-        document.querySelectorAll('.sidebar-user-avatar img').forEach(img => img.src = url);
-    });
+    if (this.files && this.files[0]) {
+        uploadProfilePic(this.files[0]);
+    }
 });
 
-/* Click upload area inside modal → upload */
-document.getElementById('modalPicInput').addEventListener('change', function() {
-    uploadProfilePic(this.files[0], function(url) {
-        let thumb = document.getElementById('modalThumb');
-        if (!thumb) {
-            thumb = document.createElement('img');
-            thumb.id = 'modalThumb';
-            thumb.className = 'pic-preview-thumb';
-            document.querySelector('.pic-upload-area').prepend(thumb);
-            const icon = document.querySelector('.pic-upload-area > i');
-            if (icon) icon.style.display = 'none';
+/* ── Click upload area inside modal ── */
+const modalInput = document.getElementById('modalPicInput');
+if (modalInput) {
+    modalInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            uploadProfilePic(this.files[0]);
         }
-        thumb.src = url;
-        const main = document.getElementById('avatarPreview');
-        main.src = url;
-        main.style.display = 'block';
-        const iconWrap = document.getElementById('avatarIconWrap');
-        if (iconWrap) iconWrap.style.display = 'none';
-        document.querySelectorAll('.sidebar-user-avatar img').forEach(img => img.src = url);
     });
-});
+}
 
-function uploadProfilePic(file, onSuccess) {
-    if (!file) return;
+/* ── Upload function ── */
+function uploadProfilePic(file) {
     const status = document.getElementById('uploadStatus');
-    status.style.display = 'block';
-    status.style.color = 'var(--accent)';
-    status.textContent = 'Uploading…';
+    if (status) {
+        status.style.display = 'block';
+        status.style.color   = 'var(--accent)';
+        status.textContent   = 'Uploading…';
+    }
+
     const fd = new FormData();
     fd.append('profile_pic', file);
+
     fetch('upload_profile_pic.php', { method: 'POST', body: fd })
-        .then(r => r.json())
-        .then(data => {
-            if (data.success) {
+    .then(r => r.json())
+    .then(data => {
+        console.log('Upload response:', data);
+        if (data.success) {
+            const url = data.url + '?t=' + Date.now();
+
+            /* Update avatar on page */
+            const preview = document.getElementById('avatarPreview');
+            if (preview) { preview.src = url; preview.style.display = 'block'; }
+
+            const iconWrap = document.getElementById('avatarIconWrap');
+            if (iconWrap) iconWrap.style.display = 'none';
+
+            /* Update modal thumbnail */
+            let thumb = document.getElementById('modalThumb');
+            if (!thumb) {
+                thumb = document.createElement('img');
+                thumb.id = 'modalThumb';
+                thumb.className = 'pic-preview-thumb';
+                const area = document.querySelector('.pic-upload-area');
+                if (area) area.prepend(thumb);
+            }
+            thumb.src = url;
+
+            /* Update sidebar avatar */
+            document.querySelectorAll('.sidebar-user-avatar img').forEach(img => img.src = url);
+
+            if (status) {
                 status.textContent = '✓ Photo updated!';
-                onSuccess(data.url + '?t=' + Date.now());
-                setTimeout(() => { status.style.display = 'none'; }, 2500);
-            } else {
+                setTimeout(() => { status.style.display = 'none'; }, 3000);
+            }
+        } else {
+            if (status) {
                 status.style.color = '#ff4d4d';
                 status.textContent = '✗ ' + (data.message || 'Upload failed');
             }
-        })
-        .catch(() => {
-            status.style.color = '#ff4d4d';
-            status.textContent = '✗ Upload error. Check server.';
-        });
+        }
+    })
+    .catch(err => {
+        console.error('Upload error:', err);
+        if (status) {
+            status.style.color   = '#ff4d4d';
+            status.textContent   = '✗ Upload error — check console';
+        }
+    });
 }
 </script>
+
 
 
 </body>
