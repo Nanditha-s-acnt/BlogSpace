@@ -1211,3 +1211,6 @@ input:checked + .slider:before { transform: translateX(21px); }
     min-width: 22px;
     flex-shrink: 0;
 }
+.mobile-nav {
+    display: none; /* hidden on desktop, shown only in @media (max-width: 768px) */
+}
