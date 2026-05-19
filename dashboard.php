@@ -278,6 +278,38 @@ $posts_result = mysqli_query($conn,
             object-fit: cover;
             margin-top: 15px;
         }
+       /* Force sidebar layout fix */
+.sidebar {
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    height: 100vh !important;
+}
+.sidebar-top {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    min-height: 0 !important;
+}
+.sidebar-bottom {
+    flex-shrink: 0 !important;
+    padding-top: 16px !important;
+    border-top: 1px solid #2a2a2a !important;
+    margin-top: 12px !important;
+}
+.logout-link {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    color: #ff4d4d !important;
+    text-decoration: none !important;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,77,77,0.2);
+    background: rgba(255,77,77,0.04);
+    font-weight: 600;
+    font-size: 0.88rem;
+}
+ 
     
     </style>
 </head>
