@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 require_once 'db.php';
@@ -17,11 +16,12 @@ if (!isset($_FILES['profile_pic']) || $_FILES['profile_pic']['error'] !== UPLOAD
     exit();
 }
 
-$allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-$file_type     = mime_content_type($_FILES['profile_pic']['tmp_name']);
+// Check by file extension (works on all servers including Windows)
+$ext = strtolower(pathinfo($_FILES['profile_pic']['name'], PATHINFO_EXTENSION));
+$allowed_exts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
-if (!in_array($file_type, $allowed_types)) {
-    echo json_encode(['success' => false, 'message' => 'Invalid file type']);
+if (!in_array($ext, $allowed_exts)) {
+    echo json_encode(['success' => false, 'message' => 'Use JPG, PNG, GIF or WEBP']);
     exit();
 }
 
@@ -30,12 +30,11 @@ if ($_FILES['profile_pic']['size'] > 5 * 1024 * 1024) {
     exit();
 }
 
-// Create uploads folder if it doesn't exist
 if (!is_dir('uploads')) {
     mkdir('uploads', 0755, true);
 }
 
-// Delete old profile pic
+// Delete old pic
 $res = mysqli_query($conn, "SELECT profile_pic FROM users WHERE id=$user_id");
 $row = mysqli_fetch_assoc($res);
 if (!empty($row['profile_pic']) && $row['profile_pic'] !== 'default.png') {
@@ -43,8 +42,6 @@ if (!empty($row['profile_pic']) && $row['profile_pic'] !== 'default.png') {
     if (file_exists($old)) unlink($old);
 }
 
-// Save new file
-$ext      = strtolower(pathinfo($_FILES['profile_pic']['name'], PATHINFO_EXTENSION));
 $filename = 'user_' . $user_id . '_' . time() . '.' . $ext;
 $dest     = 'uploads/' . $filename;
 
@@ -53,7 +50,6 @@ if (!move_uploaded_file($_FILES['profile_pic']['tmp_name'], $dest)) {
     exit();
 }
 
-// Save filename to database
 $stmt = mysqli_prepare($conn, "UPDATE users SET profile_pic = ? WHERE id = ?");
 mysqli_stmt_bind_param($stmt, 'si', $filename, $user_id);
 mysqli_stmt_execute($stmt);
