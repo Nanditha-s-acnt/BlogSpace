@@ -297,51 +297,104 @@ $user_theme     = in_array($_SESSION['theme'] ?? '', $allowed_themes)
 <body class="dashboard-body">
 
     <!-- ══════════════ SIDEBAR ══════════════ -->
-    <aside class="sidebar">
-        <div>
-            <a href="index.php" class="logo">Blog<span>Space</span></a>
-            <nav class="side-nav">
-                <a href="dashboard.php"><i class='bx bx-home'></i> Home</a>
-                <a href="profile.php" class="active"><i class='bx bx-user'></i> Profile</a>
-                <a href="write.php"><i class='bx bx-edit-alt'></i> Write</a>
-                <a href="drafts.php"><i class='bx bx-bookmark'></i> Saved</a>
-                <a href="settings.php"><i class='bx bx-cog'></i> Settings</a>
-            </nav>
-        </div>
-        <div class="sidebar-bottom">
-            <a href="logout.php" class="logout-link">
-                <i class='bx bx-log-out'></i> Logout
-            </a>
-        </div>
-    </aside>
+   <aside class="sidebar">
+    <div class="sidebar-top">
+        <div class="logo">BlogSpace<span>.</span></div>
+
+        <a href="profile.php" class="sidebar-user-card">
+            <div class="sidebar-user-avatar">
+                <?php if (!empty($user['profile_pic']) && file_exists('uploads/' . $user['profile_pic'])): ?>
+                    <img src="uploads/<?= htmlspecialchars($user['profile_pic']) ?>" alt="">
+                <?php else: ?>
+                    <div class="sidebar-avatar-fallback"><i class='bx bxs-user-circle'></i></div>
+                <?php endif; ?>
+                <span class="online-dot"></span>
+            </div>
+            <div class="sidebar-user-info">
+                <span class="sidebar-user-name"><?= htmlspecialchars($user['username']) ?></span>
+                <span class="sidebar-user-handle">My Profile</span>
+            </div>
+        </a>
+
+        <nav class="side-nav">
+            <a href="dashboard.php"><i class='bx bx-home-alt-2'></i> Feed</a>
+            <a href="profile.php" class="active"><i class='bx bx-user-circle'></i> My Profile</a>
+            <a href="write.php"><i class='bx bx-edit-alt'></i> Write Post</a>
+            <a href="drafts.php"><i class='bx bx-file'></i> Drafts</a>
+            <a href="settings.php"><i class='bx bx-cog'></i> Settings</a>
+        </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+        <a href="logout.php" class="logout-link">
+            <i class='bx bx-log-out'></i> Logout
+        </a>
+    </div>
+</aside>
+
 
     <!-- ══════════════ MAIN CONTENT ══════════════ -->
     <main class="feed-container">
 
         <!-- ── Profile Header ───────────────────── -->
-        <div class="profile-header">
-            <div class="profile-main">
-                <div class="profile-avatar">
+<div class="profile-header">
+
+    <div class="profile-cover">
+        <div class="profile-cover-inner"><i class='bx bx-landscape'></i></div>
+    </div>
+
+    <div class="profile-main" style="padding:30px 0 0; align-items:flex-start;">
+
+        <div class="profile-avatar-wrapper"
+             onclick="document.getElementById('avatarFileInput').click()"
+             title="Change photo">
+            <?php if (!empty($user['profile_pic']) && file_exists('uploads/' . $user['profile_pic'])): ?>
+                <img src="uploads/<?= htmlspecialchars($user['profile_pic']) ?>"
+                     alt="Profile" class="profile-avatar-img" id="avatarPreview">
+            <?php else: ?>
+                <div class="profile-avatar-icon-wrap" id="avatarIconWrap">
                     <i class='bx bxs-user-circle'></i>
                 </div>
-                <div class="profile-info">
-                    <h1><?php echo htmlspecialchars($user['username']); ?></h1>
-                    <p class="handle">
-                        <?php echo htmlspecialchars(
-                            !empty($user['bio']) ? $user['bio'] : 'No bio yet. Click Edit Profile to add one.'
-                        ); ?>
-                    </p>
-                    <div class="stats-row">
-                        <span><strong><?php echo $post_count; ?></strong> Published</span>
-                        <span><strong><?php echo $draft_count; ?></strong> Drafts</span>
-                    </div>
-                    <button class="btn-outline" onclick="openModal()" style="margin-top:10px;">
-                        <i class='bx bx-edit' style="vertical-align:middle; margin-right:6px;"></i>
-                        Edit Profile
-                    </button>
-                </div>
+                <img src="" alt="" class="profile-avatar-img" id="avatarPreview" style="display:none;">
+            <?php endif; ?>
+            <div class="profile-avatar-overlay">
+                <i class='bx bx-camera'></i>
+                Change Photo
             </div>
         </div>
+
+        <!-- Hidden file picker triggered by clicking avatar -->
+        <input type="file" id="avatarFileInput" accept="image/*" style="display:none;">
+
+        <div class="profile-info">
+            <h1><?= htmlspecialchars($user['username']) ?></h1>
+            <p class="handle">
+                <?= htmlspecialchars(!empty($user['bio']) ? $user['bio'] : 'No bio yet. Click Edit Profile to add one.') ?>
+            </p>
+
+            <div class="profile-stat-card" style="margin-bottom:20px;">
+                <div class="profile-stat-item">
+                    <span class="profile-stat-num"><?= $post_count ?></span>
+                    <span class="profile-stat-label">Published</span>
+                </div>
+                <div class="profile-stat-item">
+                    <span class="profile-stat-num"><?= $draft_count ?></span>
+                    <span class="profile-stat-label">Drafts</span>
+                </div>
+                <div class="profile-stat-item">
+                    <span class="profile-stat-num"><?= date('M Y', strtotime($user['created_at'] ?? 'now')) ?></span>
+                    <span class="profile-stat-label">Joined</span>
+                </div>
+            </div>
+
+            <button class="btn-outline" onclick="openModal()">
+                <i class='bx bx-edit' style="vertical-align:middle;margin-right:6px;"></i>
+                Edit Profile
+            </button>
+        </div>
+    </div>
+</div>
+
 
         <!-- ── Published Posts ──────────────────── -->
         <h2 class="section-heading">
@@ -455,52 +508,113 @@ $user_theme     = in_array($_SESSION['theme'] ?? '', $allowed_themes)
 
     <!-- ══════════════ EDIT PROFILE MODAL ══════════════ -->
     <div class="modal-overlay" id="editModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Edit Profile</h2>
-                <button class="close-modal" onclick="closeModal()">&#x2715;</button>
-            </div>
-
-            <form method="POST" action="profile.php" class="edit-form">
-                <input type="hidden" name="csrf_token"
-                       value="<?php echo htmlspecialchars($csrf_token); ?>">
-
-                <div class="input-group">
-                    <label>Username</label>
-                    <input type="text" name="username"
-                           value="<?php echo htmlspecialchars($user['username']); ?>"
-                           required>
-                </div>
-
-                <div class="input-group">
-                    <label>Bio</label>
-                    <textarea name="bio"
-                              placeholder="Write a short bio…"><?php echo htmlspecialchars($user['bio'] ?? ''); ?></textarea>
-                </div>
-
-                <div class="modal-actions">
-                    <button type="button" class="btn-secondary" onclick="closeModal()">
-                        Cancel
-                    </button>
-                    <button type="submit" name="save_profile" class="btn-primary">
-                        Save Changes
-                    </button>
-                </div>
-            </form>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Edit Profile</h2>
+            <button class="close-modal" onclick="closeModal()">&#x2715;</button>
         </div>
-    </div>
 
-    <script>
-        function openModal() {
-            document.getElementById('editModal').style.display = 'flex';
+        <div class="pic-upload-area">
+            <?php if (!empty($user['profile_pic']) && file_exists('uploads/' . $user['profile_pic'])): ?>
+                <img src="uploads/<?= htmlspecialchars($user['profile_pic']) ?>"
+                     class="pic-preview-thumb" id="modalThumb">
+            <?php else: ?>
+                <i class='bx bx-camera'></i>
+            <?php endif; ?>
+            <p><span>Click to upload</span> a profile photo<br>
+               <small style="color:#444;">JPG, PNG, WEBP · Max 5 MB</small></p>
+            <input type="file" id="modalPicInput" accept="image/*">
+        </div>
+        <p id="uploadStatus" style="font-size:0.8rem;color:var(--accent);margin:-8px 0 14px;display:none;"></p>
+
+        <form method="POST" action="profile.php" class="edit-form">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token) ?>">
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" name="username"
+                       value="<?= htmlspecialchars($user['username']) ?>" required>
+            </div>
+            <div class="input-group">
+                <label>Bio</label>
+                <textarea name="bio" placeholder="Write a short bio…"><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button type="submit" name="save_profile" class="btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+function openModal()  { document.getElementById('editModal').style.display = 'flex'; }
+function closeModal() { document.getElementById('editModal').style.display = 'none'; }
+document.getElementById('editModal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+});
+
+/* Click avatar on profile page → upload */
+document.getElementById('avatarFileInput').addEventListener('change', function() {
+    uploadProfilePic(this.files[0], function(url) {
+        const preview = document.getElementById('avatarPreview');
+        preview.src = url;
+        preview.style.display = 'block';
+        const iconWrap = document.getElementById('avatarIconWrap');
+        if (iconWrap) iconWrap.style.display = 'none';
+        document.querySelectorAll('.sidebar-user-avatar img').forEach(img => img.src = url);
+    });
+});
+
+/* Click upload area inside modal → upload */
+document.getElementById('modalPicInput').addEventListener('change', function() {
+    uploadProfilePic(this.files[0], function(url) {
+        let thumb = document.getElementById('modalThumb');
+        if (!thumb) {
+            thumb = document.createElement('img');
+            thumb.id = 'modalThumb';
+            thumb.className = 'pic-preview-thumb';
+            document.querySelector('.pic-upload-area').prepend(thumb);
+            const icon = document.querySelector('.pic-upload-area > i');
+            if (icon) icon.style.display = 'none';
         }
-        function closeModal() {
-            document.getElementById('editModal').style.display = 'none';
-        }
-        document.getElementById('editModal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
+        thumb.src = url;
+        const main = document.getElementById('avatarPreview');
+        main.src = url;
+        main.style.display = 'block';
+        const iconWrap = document.getElementById('avatarIconWrap');
+        if (iconWrap) iconWrap.style.display = 'none';
+        document.querySelectorAll('.sidebar-user-avatar img').forEach(img => img.src = url);
+    });
+});
+
+function uploadProfilePic(file, onSuccess) {
+    if (!file) return;
+    const status = document.getElementById('uploadStatus');
+    status.style.display = 'block';
+    status.style.color = 'var(--accent)';
+    status.textContent = 'Uploading…';
+    const fd = new FormData();
+    fd.append('profile_pic', file);
+    fetch('upload_profile_pic.php', { method: 'POST', body: fd })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                status.textContent = '✓ Photo updated!';
+                onSuccess(data.url + '?t=' + Date.now());
+                setTimeout(() => { status.style.display = 'none'; }, 2500);
+            } else {
+                status.style.color = '#ff4d4d';
+                status.textContent = '✗ ' + (data.message || 'Upload failed');
+            }
+        })
+        .catch(() => {
+            status.style.color = '#ff4d4d';
+            status.textContent = '✗ Upload error. Check server.';
         });
-    </script>
+}
+</script>
+
 
 </body>
 </html>
