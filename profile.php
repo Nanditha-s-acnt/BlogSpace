@@ -437,7 +437,6 @@ $user_theme     = in_array($_SESSION['theme'] ?? '', $allowed_themes)
     <div class="profile-main" style="padding:30px 0 0; align-items:flex-start;">
 
 <div class="profile-avatar-wrapper"
-     onclick="document.getElementById('avatarFileInput').click()"
      title="Change photo">
 
     <img src="uploads/<?= !empty($user['profile_pic']) ? htmlspecialchars($user['profile_pic']) : '' ?>"
