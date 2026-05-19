@@ -1,6 +1,10 @@
 <?php
 session_start();
 require_once 'db.php';
+$u = mysqli_query($conn, "SELECT * FROM users WHERE id=" . (int)$_SESSION['user_id']);
+$user = mysqli_fetch_assoc($u);
+
+
 
 if(!isset($_SESSION['user_id'])) {
     header("Location: /BlogSpace/auth.php");
@@ -224,6 +228,22 @@ $topics = [
 <aside class="sidebar">
     <div class="sidebar-top">
         <div class="logo">BlogSpace<span>.</span></div>
+
+        <a href="profile.php" class="sidebar-user-card">
+            <div class="sidebar-user-avatar">
+                <?php if (!empty($user['profile_pic']) && file_exists('uploads/' . $user['profile_pic'])): ?>
+                    <img src="uploads/<?= htmlspecialchars($user['profile_pic']) ?>" alt="">
+                <?php else: ?>
+                    <div class="sidebar-avatar-fallback"><i class='bx bxs-user-circle'></i></div>
+                <?php endif; ?>
+                <span class="online-dot"></span>
+            </div>
+            <div class="sidebar-user-info">
+                <span class="sidebar-user-name"><?= htmlspecialchars($user['username'] ?? $_SESSION['username'] ?? 'Writer') ?></span>
+                <span class="sidebar-user-handle">Writer · BlogSpace</span>
+            </div>
+        </a>
+
         <nav class="side-nav">
             <a href="dashboard.php"><i class='bx bx-home-alt-2'></i> Feed</a>
             <a href="profile.php"><i class='bx bx-user-circle'></i> My Profile</a>
@@ -232,10 +252,14 @@ $topics = [
             <a href="settings.php"><i class='bx bx-cog'></i> Settings</a>
         </nav>
     </div>
+
     <div class="sidebar-bottom">
-        <a href="logout.php" class="logout-link"><i class='bx bx-log-out'></i> Logout</a>
+        <a href="logout.php" class="logout-link">
+            <i class='bx bx-log-out'></i> Logout
+        </a>
     </div>
 </aside>
+
 
 <!-- MAIN -->
 <main class="feed-container">
