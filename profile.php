@@ -291,6 +291,97 @@ $user_theme     = in_array($_SESSION['theme'] ?? '', $allowed_themes)
             color: var(--error);
             border-color: var(--error);
         }
+        .profile-stat-card {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+.profile-stat-item {
+    text-align: center;
+    padding: 14px 18px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    min-width: 80px;
+}
+.profile-stat-num {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--accent);
+}
+.profile-stat-label {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.profile-cover {
+    width: 100%;
+    height: 160px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2420 50%, #1a1a1a 100%);
+    border-bottom: 1px solid #2a2a2a;
+    border-radius: 4px 4px 0 0;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+.profile-cover-inner {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(212,188,142,0.06) 0%, rgba(212,188,142,0.02) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-cover-inner i { font-size: 4rem; color: rgba(212,188,142,0.08); }
+.profile-avatar-wrapper {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.profile-avatar-img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--accent);
+    display: block;
+}
+.profile-avatar-icon-wrap {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: rgba(212,188,142,0.08);
+    border: 3px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4.5rem;
+    color: var(--accent);
+}
+.profile-avatar-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+    color: white;
+    font-size: 0.68rem;
+    font-weight: 600;
+    gap: 4px;
+}
+.profile-avatar-overlay i { font-size: 1.3rem; }
+.profile-avatar-wrapper:hover .profile-avatar-overlay { opacity: 1; }
+
+        
     </style>
 </head>
 
@@ -345,26 +436,28 @@ $user_theme     = in_array($_SESSION['theme'] ?? '', $allowed_themes)
 
     <div class="profile-main" style="padding:30px 0 0; align-items:flex-start;">
 
-        <div class="profile-avatar-wrapper"
-             onclick="document.getElementById('avatarFileInput').click()"
-             title="Change photo">
-            <?php if (!empty($user['profile_pic']) && file_exists('uploads/' . $user['profile_pic'])): ?>
-                <img src="uploads/<?= htmlspecialchars($user['profile_pic']) ?>"
-                     alt="Profile" class="profile-avatar-img" id="avatarPreview">
-            <?php else: ?>
-                <div class="profile-avatar-icon-wrap" id="avatarIconWrap">
-                    <i class='bx bxs-user-circle'></i>
-                </div>
-                <img src="" alt="" class="profile-avatar-img" id="avatarPreview" style="display:none;">
-            <?php endif; ?>
-            <div class="profile-avatar-overlay">
-                <i class='bx bx-camera'></i>
-                Change Photo
-            </div>
-        </div>
+<div class="profile-avatar-wrapper"
+     onclick="document.getElementById('avatarFileInput').click()"
+     title="Change photo">
 
-        <!-- Hidden file picker triggered by clicking avatar -->
-        <input type="file" id="avatarFileInput" accept="image/*" style="display:none;">
+    <img src="uploads/<?= !empty($user['profile_pic']) ? htmlspecialchars($user['profile_pic']) : '' ?>"
+         alt="Profile"
+         class="profile-avatar-img"
+         id="avatarPreview"
+         onerror="this.style.display='none'; document.getElementById('avatarIconWrap').style.display='flex';"
+         style="<?= empty($user['profile_pic']) ? 'display:none;' : '' ?>">
+
+    <div class="profile-avatar-icon-wrap" id="avatarIconWrap"
+         style="<?= !empty($user['profile_pic']) ? 'display:none;' : 'display:flex;' ?>">
+        <i class='bx bxs-user-circle'></i>
+    </div>
+
+    <div class="profile-avatar-overlay">
+        <i class='bx bx-camera'></i>
+        Change Photo
+    </div>
+</div>
+<input type="file" id="avatarFileInput" accept="image/*" style="display:none;">
 
         <div class="profile-info">
             <h1><?= htmlspecialchars($user['username']) ?></h1>
