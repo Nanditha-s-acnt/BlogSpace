@@ -275,6 +275,17 @@ $user   = mysqli_fetch_assoc($result);
     gap: 8px;
     padding: 12px 28px;
 }
+    /* Add inside <style> tag in settings.php and write.php */
+.side-nav a {
+    position: static !important;
+}
+/* Hide any nav that leaked outside sidebar */
+.feed-container .side-nav,
+.feed-container nav {
+    display: none;
+}
+
+    
 </style>
 </head>
 
