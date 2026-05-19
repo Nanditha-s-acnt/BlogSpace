@@ -648,19 +648,7 @@ document.getElementById('editModal').addEventListener('click', e => {
     if (e.target === e.currentTarget) closeModal();
 });
 
-/* ── Click avatar on profile page ── */
-const avatarWrapper = document.querySelector('.profile-avatar-wrapper');
-if (avatarWrapper) {
-    avatarWrapper.addEventListener('click', function() {
-        document.getElementById('avatarFileInput').click();
-    });
-}
 
-document.getElementById('avatarFileInput').addEventListener('change', function() {
-    if (this.files && this.files[0]) {
-        uploadProfilePic(this.files[0]);
-    }
-});
 
 /* ── Click upload area inside modal ── */
 const modalInput = document.getElementById('modalPicInput');
