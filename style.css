@@ -1175,5 +1175,39 @@ input:checked + .slider:before { transform: translateX(21px); }
     transition: width 0.1s linear;
 }
 
-ne;
+/* ══════════════════════════════════════════
+   SIDEBAR NAV - SINGLE CLEAN DEFINITION
+══════════════════════════════════════════ */
+.side-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 50px;
+}
+
+.side-nav a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 14px;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: color 0.3s, background 0.2s;
+    position: relative; /* Do NOT set static */
+}
+
+.side-nav a:hover,
+.side-nav a.active {
+    color: var(--accent);
+    background: rgba(212, 188, 142, 0.06);
+}
+
+.side-nav i {
+    font-size: 1.3rem;
+    color: inherit;
+    min-width: 22px;
+    flex-shrink: 0;
 }
