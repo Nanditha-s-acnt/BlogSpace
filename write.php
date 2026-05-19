@@ -219,15 +219,7 @@ $topics = [
     border-left: 3px solid var(--error);
     margin-bottom: 30px;
 }
-    /* Add inside <style> tag in settings.php and write.php */
-.side-nav a {
-    position: static !important;
-}
-/* Hide any nav that leaked outside sidebar */
-.feed-container .side-nav,
-.feed-container nav {
-    display: none;
-}
+  
 
 </style>
 
