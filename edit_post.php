@@ -52,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $topic     = trim($_POST['topic']     ?? 'General');
     $format    = trim($_POST['format']    ?? 'text');
     $media_url = trim($_POST['media_url'] ?? '');
+    $code_block = trim($_POST['content_extra'] ?? '');
     $status    = isset($_POST['save_draft']) ? 'draft' : 'published';
 
     $allowed_topics  = ['Tech','Lifestyle','Health','Travel','Food','Finance','Culture','General'];
@@ -62,11 +63,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($title !== '' && $content !== '') {
         $upd = mysqli_prepare($conn,
             "UPDATE posts
-             SET title = ?, content = ?, topic = ?, post_format = ?, media_url = ?, status = ?
+             SET title = ?, content = ?, topic = ?, post_format = ?, media_url = ?, context_extra=?, status = ?
              WHERE id = ? AND user_id = ?"
         );
         mysqli_stmt_bind_param($upd, "ssssssii",
-            $title, $content, $topic, $format, $media_url, $status, $post_id, $user_id
+            $title, $content, $topic, $format, $media_url, $code_block, $status, $post_id, $user_id
         );
         mysqli_stmt_execute($upd);
         mysqli_stmt_close($upd);
