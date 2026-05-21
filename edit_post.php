@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              SET title = ?, content = ?, topic = ?, post_format = ?, media_url = ?, content_extra=?, status = ?
              WHERE id = ? AND user_id = ?"
         );
-        mysqli_stmt_bind_param($upd, "ssssssii",
+        mysqli_stmt_bind_param($upd, "sssssssii",
             $title, $content, $topic, $format, $media_url, $code_block, $status, $post_id, $user_id
         );
         mysqli_stmt_execute($upd);
