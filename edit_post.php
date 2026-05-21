@@ -419,6 +419,16 @@ $user_theme     = in_array($_SESSION['theme'] ?? '', $allowed_themes)
                     >
                     <img id="img-preview" src="" alt="Image preview">
                 </div>
+                <!-- ── Code Block (code format only) ── -->
+<div class="form-section" id="code-section" style="display:none;">
+    <label class="form-label">Code Block</label>
+    <textarea
+        name="content_extra"
+        class="story-area"
+        placeholder="Paste your code here..."
+        style="font-family: monospace; color: #0f0; background: #111; min-height: 200px;"
+    ><?php echo htmlspecialchars($post['content_extra'] ?? ''); ?></textarea>
+</div>
 
                 <!-- ── Actions ── -->
                 <div class="form-actions">
@@ -440,14 +450,13 @@ $user_theme     = in_array($_SESSION['theme'] ?? '', $allowed_themes)
 
     <script>
         function toggleMedia() {
-            const fmt = document.querySelector('input[name="format"]:checked')?.value;
-            const section = document.getElementById('media-section');
-            if (fmt === 'image') {
-                section.classList.add('visible');
-            } else {
-                section.classList.remove('visible');
-            }
-        }
+    const fmt = document.querySelector('input[name="format"]:checked')?.value;
+    const mediaSection = document.getElementById('media-section');
+    const codeSection  = document.getElementById('code-section');
+
+    mediaSection.classList.toggle('visible', fmt === 'image');
+    codeSection.style.display = (fmt === 'code') ? 'block' : 'none';
+}
 
         function previewImage(url) {
             const img = document.getElementById('img-preview');
