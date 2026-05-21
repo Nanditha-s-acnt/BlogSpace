@@ -179,6 +179,22 @@ $user_theme     = in_array($_SESSION['theme'] ?? '', $allowed_themes)
                 }
                 ?>
             </div>
+            <!-- ── Code Block ── -->
+<?php if (!empty($post['content_extra']) && ($post['post_format'] ?? $post['post_type'] ?? '') === 'code'): ?>
+<div style="margin-top: 30px;">
+    <pre style="
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 6px;
+        padding: 20px;
+        overflow-x: auto;
+        color: #0f0;
+        font-family: monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+    "><code><?php echo htmlspecialchars($post['content_extra']); ?></code></pre>
+</div>
+<?php endif; ?>
 
             <!-- ══════ COMMENTS SECTION ══════ -->
             <div style="
