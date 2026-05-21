@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($title !== '' && $content !== '') {
         $upd = mysqli_prepare($conn,
             "UPDATE posts
-             SET title = ?, content = ?, topic = ?, post_format = ?, media_url = ?, context_extra=?, status = ?
+             SET title = ?, content = ?, topic = ?, post_format = ?, media_url = ?, content_extra=?, status = ?
              WHERE id = ? AND user_id = ?"
         );
         mysqli_stmt_bind_param($upd, "ssssssii",
